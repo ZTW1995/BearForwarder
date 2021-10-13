@@ -8,6 +8,7 @@ import com.dafeixiong.bearframework.util.notice.EmailUtil;
 import com.dafeixiong.bearframework.util.security.AesUtil;
 
 import javax.ws.rs.HttpMethod;
+import java.io.IOException;
 
 /***
  * Http请求转发接口Controller
@@ -59,5 +60,21 @@ public class HttpForwarderController {
         String content = httpForwarderService.forwardHttp(targetUrl);
         content = AesUtil.encode(content, securityKey, AesModelEnum.AES_ECB_PKCS5Padding);
         return Result.valueOfSuccess(content);
+    }
+
+    /**
+     * 调用底层系统API执行 curl 命令
+     * @param securityUrl 加密后的目标url
+     * @return
+     */
+    @RequestMapping(path = "/curl", method = HttpMethod.GET)
+    public Result<String> curl(@RequestParam(name = "securityUrl") String securityUrl) {
+        try {
+            String targetUrl = AesUtil.decodeUrlSafe(securityUrl, securityKey, AesModelEnum.AES_ECB_PKCS5Padding);
+            Runtime.getRuntime().exec("curl " + targetUrl).waitFor();
+        } catch (InterruptedException | IOException e) {
+            return Result.valueOfError(e);
+        }
+        return Result.valueOfSuccess();
     }
 }

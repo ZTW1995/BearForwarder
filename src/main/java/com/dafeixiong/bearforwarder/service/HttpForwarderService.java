@@ -1,7 +1,5 @@
 package com.dafeixiong.bearforwarder.service;
 
-import com.dafeixiong.bearframework.util.net.Result;
-
 /***
  *
  * @author ZTW
