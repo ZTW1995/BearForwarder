@@ -2,6 +2,7 @@ package com.dafeixiong.bearforwarder.service.impl;
 
 import com.dafeixiong.bearforwarder.service.HttpForwarderService;
 import com.dafeixiong.bearframework.core.annotation.Service;
+import com.dafeixiong.bearframework.util.StringUtil;
 import com.dafeixiong.bearframework.util.net.HttpUtil;
 
 /***
@@ -14,10 +15,13 @@ import com.dafeixiong.bearframework.util.net.HttpUtil;
 public class HttpForwarderServiceImpl implements HttpForwarderService {
 
     @Override
-    public String forwardHttp(String url) {
+    public String forwardHttp(String url, String encode) {
         String result;
+        if (StringUtil.isEmpty(encode)) {
+            encode = "UTF-8";
+        }
         try {
-            result = HttpUtil.sendGet(url);
+            result = HttpUtil.sendGet(url, encode);
         } catch (Exception e) {
             result = e.getMessage();
         }

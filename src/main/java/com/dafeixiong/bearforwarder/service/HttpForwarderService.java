@@ -13,5 +13,5 @@ public interface HttpForwarderService {
      * @param url 待转发的目标Url
      * @return 转发后的请求响应结果字符串
      */
-    String forwardHttp(String url);
+    String forwardHttp(String url, String encode);
 }

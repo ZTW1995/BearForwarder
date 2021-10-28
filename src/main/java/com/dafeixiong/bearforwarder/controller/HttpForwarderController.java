@@ -57,7 +57,22 @@ public class HttpForwarderController {
     @RequestMapping(path = "/get", method = HttpMethod.GET)
     public Result<String> get(@RequestParam(name = "securityUrl") String securityUrl) {
         String targetUrl = AesUtil.decodeUrlSafe(securityUrl, securityKey, AesModelEnum.AES_ECB_PKCS5Padding);
-        String content = httpForwarderService.forwardHttp(targetUrl);
+        String content = httpForwarderService.forwardHttp(targetUrl, "");
+        content = AesUtil.encode(content, securityKey, AesModelEnum.AES_ECB_PKCS5Padding);
+        return Result.valueOfSuccess(content);
+    }
+
+    /**
+     *
+     * @param securityUrl 加密后的目标url
+     * @return 加密后的url响应结果字符串
+     */
+    @RequestMapping(path = "/charsetGet", method = HttpMethod.GET)
+    public Result<String> get(@RequestParam(name = "securityUrl") String securityUrl,
+                              @RequestParam(name = "charset")String charset) {
+        String targetUrl = AesUtil.decodeUrlSafe(securityUrl, securityKey, AesModelEnum.AES_ECB_PKCS5Padding);
+        charset = AesUtil.decodeUrlSafe(charset, securityKey, AesModelEnum.AES_ECB_PKCS5Padding);
+        String content = httpForwarderService.forwardHttp(targetUrl, charset);
         content = AesUtil.encode(content, securityKey, AesModelEnum.AES_ECB_PKCS5Padding);
         return Result.valueOfSuccess(content);
     }
