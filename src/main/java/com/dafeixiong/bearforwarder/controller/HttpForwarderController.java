@@ -31,7 +31,7 @@ public class HttpForwarderController {
     @Value("${email}")
     private String email;
 
-    @AutoWired(name = "HttpForwarderService")
+    @AutoWire(name = "HttpForwarderService")
     private HttpForwarderService httpForwarderService;
 
     /**
